@@ -45,6 +45,7 @@ class PurchaseController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Purchase();
+        $entity->setUser($this->getUser());
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -53,7 +54,7 @@ class PurchaseController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('purchase_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('purchase', array('id' => $entity->getId())));
         }
 
         return array(
@@ -76,7 +77,7 @@ class PurchaseController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Potwierdź zakup'));
 
         return $form;
     }
@@ -84,13 +85,17 @@ class PurchaseController extends Controller
     /**
      * Displays a form to create a new Purchase entity.
      *
-     * @Route("/new", name="purchase_new")
+     * @Route("/new/{id}", name="purchase_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($id)
     {
         $entity = new Purchase();
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getRepository('SklepBundle:Product')->findOneById($id);
+        $entity->setProduct($product);
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -165,7 +170,7 @@ class PurchaseController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Aktualizuj'));
 
         return $form;
     }

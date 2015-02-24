@@ -9,20 +9,22 @@
         <div class="col-md-4">
                {#} <td><a href="{{ path('_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
                 <h2>{{ entity.name }}</h2>
-                <div><img style="height:100px"src="{{asset(entity.photo.path )}}"></div>
+                <div><img style="height:100px"src="{{asset(entity.photo.path|default('brak') )}}"></div>
                 <p><strong>Opis:</strong>
-
                     {{ entity.description }}</p>
                 <p><strong>Aktorzy:</strong> {{ entity.actors }}</p>
                 <p><strong>Cena:</strong> {{ entity.price }}</p>
                 <p>
-                    <a class="btn btn-default" href="{{ path('purchase_new') }}" role="button">View details &raquo;</a>
+                    <a class="btn btn-success" href="
+
+
+                    {{is_granted("ROLE_USER")?path('purchase_new', {'id': entity.id }):"javascript:alert('Musisz się zalogować')" }}
+
+
+                    " role="button">Zakup</a>
                 </p>
                 {% if is_granted("ROLE_USER") %}
                 <ul>
-                    <li>
-                        <a href="{{ path('_show', { 'id': entity.id }) }}">show</a>
-                    </li>
                     <li>
                         <a href="{{ path('_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
@@ -38,11 +40,9 @@
         {% endfor %}
 
 
-        <ul>
-        <li>
-            <a href="{{ path('_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+
+        <a class="btn btn-success" href="{{is_granted("ROLE_USER")?path('_new'):"javascript:alert('Musisz się zalogować')"  }}">
+            Dodaj nowy film
+        </a>
+
     {% endblock %}

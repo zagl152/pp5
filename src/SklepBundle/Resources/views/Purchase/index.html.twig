@@ -1,14 +1,15 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Purchase list</h1>
+    <h1>Lista Zamówień</h1>
 
-    <table class="records_list">
+    <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Date</th>
-                <th>Actions</th>
+                <th>Data</th>
+                <th>Film</th>
+                <th>Uzytkownik</th>
             </tr>
         </thead>
         <tbody>
@@ -17,25 +18,14 @@
                 <td><a href="{{ path('purchase_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('purchase_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('purchase_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    {{ (entity.product.name)|default('-usunięty-')~' ~ '~entity.product.price|default('0')~'$' }}
+                </td>
+                <td>
+                    {{ (entity.user.username)|default('-usunięty-') }}
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
-        <li>
-            <a href="{{ path('purchase_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}

@@ -15,8 +15,8 @@ class PurchaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
-            ->add('products')
+            ->add('product', null,
+                array('label' => 'Wybrany film'))
         ;
     }
     

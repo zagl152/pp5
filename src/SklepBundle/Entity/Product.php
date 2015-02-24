@@ -179,6 +179,6 @@ class Product
 
     public function __toString()
     {
-        return $this->name;
+        return 'Tytuł: '.$this->name.' || Cena: '.$this->price.'$';
     }
 }

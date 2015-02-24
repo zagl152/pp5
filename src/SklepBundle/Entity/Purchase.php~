@@ -29,18 +29,21 @@ class Purchase
     private $date;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product")
-     * @ORM\JoinTable(name="purchase_products",
-     *      joinColumns={@ORM\JoinColumn(name="purchase_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="products_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ORM\OneToOne(targetEntity="Product")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      **/
-    private $products;
+    private $product;
 
+    /**
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    private $user;
+    
     public function __construct()
     {
         $this->date = new \DateTime();
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        //$this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -78,35 +81,25 @@ class Purchase
 
 
     /**
-     * Add products
-     *
-     * @param \SklepBundle\Entity\Product $products
-     * @return Purchase
-     */
-    public function addProduct(\SklepBundle\Entity\Product $products)
-    {
-        $this->products[] = $products;
-
-        return $this;
-    }
-
-    /**
-     * Remove products
-     *
-     * @param \SklepBundle\Entity\Product $products
-     */
-    public function removeProduct(\SklepBundle\Entity\Product $products)
-    {
-        $this->products->removeElement($products);
-    }
-
-    /**
-     * Get products
+     * Get product
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getProducts()
+    public function getProduct()
     {
-        return $this->products;
+        return $this->product;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \SklepBundle\Entity\Product $product
+     * @return Purchase
+     */
+    public function setProduct(\SklepBundle\Entity\Product $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
     }
 }

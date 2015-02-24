@@ -29,18 +29,22 @@ class Purchase
     private $date;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product")
-     * @ORM\JoinTable(name="purchase_products",
-     *      joinColumns={@ORM\JoinColumn(name="purchase_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="products_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ORM\ManyToOne(targetEntity="Product")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="SET NULL")
      **/
-    private $products;
+    private $product;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
+     **/
+    private $user;
+    
     public function __construct()
     {
         $this->date = new \DateTime();
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+
+        //$this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -78,35 +82,48 @@ class Purchase
 
 
     /**
-     * Add products
+     * Get product
      *
-     * @param \SklepBundle\Entity\Product $products
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \SklepBundle\Entity\Product $product
      * @return Purchase
      */
-    public function addProduct(\SklepBundle\Entity\Product $products)
+    public function setProduct(\SklepBundle\Entity\Product $product = null)
     {
-        $this->products[] = $products;
+        $this->product = $product;
 
         return $this;
     }
 
     /**
-     * Remove products
+     * Set user
      *
-     * @param \SklepBundle\Entity\Product $products
+     * @param \SklepBundle\Entity\User $user
+     * @return Purchase
      */
-    public function removeProduct(\SklepBundle\Entity\Product $products)
+    public function setUser(\SklepBundle\Entity\User $user = null)
     {
-        $this->products->removeElement($products);
+        $this->user = $user;
+
+        return $this;
     }
 
     /**
-     * Get products
+     * Get user
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \SklepBundle\Entity\User 
      */
-    public function getProducts()
+    public function getUser()
     {
-        return $this->products;
+        return $this->user;
     }
 }
