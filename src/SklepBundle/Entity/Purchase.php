@@ -27,10 +27,20 @@ class Purchase
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
-    
+
+    /**
+     * @ManyToMany(targetEntity="Product")
+     * @JoinTable(name="purchase_products",
+     *      joinColumns={@JoinColumn(name="purchase_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="products_id", referencedColumnName="id", unique=true)}
+     *      )
+     **/
+    private $products;
+
     public function __construct()
     {
         $this->date = new \DateTime();
+        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
