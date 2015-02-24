@@ -18,6 +18,7 @@
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
       <parameter key="SklepBundle">SklepBundle\SklepBundle</parameter>
       <parameter key="FOSUserBundle">FOS\UserBundle\FOSUserBundle</parameter>
+      <parameter key="IphpFileStoreBundle">Iphp\FileStoreBundle\IphpFileStoreBundle</parameter>
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -28,9 +29,9 @@
     <parameter key="database_driver">pdo_mysql</parameter>
     <parameter key="database_host">127.0.0.1</parameter>
     <parameter key="database_port">null</parameter>
-    <parameter key="database_name">symfony</parameter>
-    <parameter key="database_user">root</parameter>
-    <parameter key="database_password">null</parameter>
+    <parameter key="database_name">test</parameter>
+    <parameter key="database_user">dzordz</parameter>
+    <parameter key="database_password">root</parameter>
     <parameter key="mailer_transport">smtp</parameter>
     <parameter key="mailer_host">127.0.0.1</parameter>
     <parameter key="mailer_user">null</parameter>
@@ -322,6 +323,7 @@
     <parameter key="twig.exception_listener.controller">twig.controller.exception:showAction</parameter>
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
+      <parameter>IphpFileStoreBundle:Form:fields.html.twig</parameter>
     </parameter>
     <parameter key="debug.templating.engine.twig.class">Symfony\Bundle\TwigBundle\Debug\TimedTwigEngine</parameter>
     <parameter key="twig.options" type="collection">
@@ -618,6 +620,20 @@
       <parameter>ResetPassword</parameter>
       <parameter>Default</parameter>
     </parameter>
+    <parameter key="iphp.filestore.namer.default.class">Iphp\FileStoreBundle\Naming\DefaultNamer</parameter>
+    <parameter key="iphp.filestore.directory_namer.default.class">Iphp\FileStoreBundle\Naming\DefaultDirectoryNamer</parameter>
+    <parameter key="iphp.filestore.namer.invoker.class">Iphp\FileStoreBundle\Naming\NamerServiceInvoker</parameter>
+    <parameter key="iphp.filestore.mappings" type="collection">
+      <parameter key="photo" type="collection">
+        <parameter key="upload_dir">D:\Programowanie\PP5\zaglewski\app/../web/photo</parameter>
+        <parameter key="upload_path">/photo</parameter>
+        <parameter key="delete_on_remove">true</parameter>
+        <parameter key="overwrite_duplicates">false</parameter>
+        <parameter key="namer" type="collection"/>
+        <parameter key="directory_namer" type="collection"/>
+      </parameter>
+    </parameter>
+    <parameter key="iphp.filestore.datastorage.class">Iphp\FileStoreBundle\DataStorage\OrmDataStorage</parameter>
     <parameter key="web_profiler.controller.profiler.class">Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController</parameter>
     <parameter key="web_profiler.controller.router.class">Symfony\Bundle\WebProfilerBundle\Controller\RouterController</parameter>
     <parameter key="web_profiler.controller.exception.class">Symfony\Bundle\WebProfilerBundle\Controller\ExceptionController</parameter>
@@ -1141,6 +1157,7 @@
               <argument key="fos_user_registration">fos_user.registration.form.type</argument>
               <argument key="fos_user_change_password">fos_user.change_password.form.type</argument>
               <argument key="fos_user_resetting">fos_user.resetting.form.type</argument>
+              <argument key="iphp_file">iphp.filestore.type.iphp_file</argument>
             </argument>
             <argument type="collection">
               <argument key="form" type="collection">
@@ -1856,7 +1873,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>54ec3e9874665</argument>
+            <argument>54ec3f85905f4</argument>
           </service>
         </argument>
       </argument>
@@ -2135,7 +2152,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>54ec3e9874665</argument>
+            <argument>54ec3f85905f4</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -2344,6 +2361,7 @@
                   <service class="Symfony\Bridge\Twig\Form\TwigRendererEngine" public="false">
                     <argument type="collection">
                       <argument>form_div_layout.html.twig</argument>
+                      <argument>IphpFileStoreBundle:Form:fields.html.twig</argument>
                     </argument>
                   </service>
                 </argument>
@@ -2561,9 +2579,9 @@
         <argument key="driver">pdo_mysql</argument>
         <argument key="host">127.0.0.1</argument>
         <argument key="port">null</argument>
-        <argument key="dbname">symfony</argument>
-        <argument key="user">root</argument>
-        <argument key="password">null</argument>
+        <argument key="dbname">test</argument>
+        <argument key="user">dzordz</argument>
+        <argument key="password">root</argument>
         <argument key="charset">UTF8</argument>
         <argument key="driverOptions" type="collection"/>
       </argument>
@@ -2597,6 +2615,16 @@
               <service class="FOS\UserBundle\Doctrine\Orm\UserListener" public="false">
                 <tag name="doctrine.event_subscriber"/>
                 <argument type="service" id="service_container"/>
+              </service>
+            </argument>
+          </call>
+          <call method="addEventSubscriber">
+            <argument type="service">
+              <service class="Iphp\FileStoreBundle\EventListener\UploaderListener" public="false">
+                <tag name="doctrine.event_subscriber"/>
+                <argument type="service" id="iphp.filestore.datastorage"/>
+                <argument type="service" id="iphp.filestore.filestorage.file_system"/>
+                <argument type="service" id="iphp.filestore.mapping.factory"/>
               </service>
             </argument>
           </call>
@@ -2855,6 +2883,38 @@
       <argument type="service" id="router"/>
       <argument>86400</argument>
     </service>
+    <service id="iphp.filestore.type.iphp_file" class="Iphp\FileStoreBundle\Form\Type\FileType">
+      <tag name="form.type" alias="iphp_file"/>
+      <argument type="service" id="iphp.filestore.mapping.factory"/>
+      <argument type="service" id="iphp.filestore.datastorage"/>
+      <argument type="service" id="iphp.filestore.filestorage.file_system"/>
+    </service>
+    <service id="iphp.filestore.namer.default" class="Iphp\FileStoreBundle\Naming\DefaultNamer"/>
+    <service id="iphp.filestore.directory_namer.default" class="Iphp\FileStoreBundle\Naming\DefaultDirectoryNamer"/>
+    <service id="iphp.filestore.mapping.factory" class="Iphp\FileStoreBundle\Mapping\PropertyMappingFactory" public="false">
+      <argument type="service">
+        <service class="Iphp\FileStoreBundle\Naming\NamerServiceInvoker" public="false">
+          <argument type="service" id="service_container"/>
+        </service>
+      </argument>
+      <argument type="service">
+        <service class="Iphp\FileStoreBundle\Driver\AnnotationDriver" public="false">
+          <argument type="service" id="annotation_reader"/>
+        </service>
+      </argument>
+      <argument type="collection">
+        <argument key="photo" type="collection">
+          <argument key="upload_dir">D:\Programowanie\PP5\zaglewski\app/../web/photo</argument>
+          <argument key="upload_path">/photo</argument>
+          <argument key="delete_on_remove">true</argument>
+          <argument key="overwrite_duplicates">false</argument>
+          <argument key="namer" type="collection"/>
+          <argument key="directory_namer" type="collection"/>
+        </argument>
+      </argument>
+    </service>
+    <service id="iphp.filestore.datastorage" class="Iphp\FileStoreBundle\DataStorage\OrmDataStorage" public="false"/>
+    <service id="iphp.filestore.filestorage.file_system" class="Iphp\FileStoreBundle\FileStorage\FileSystemStorage"/>
     <service id="data_collector.dump" class="Symfony\Component\HttpKernel\DataCollector\DumpDataCollector">
       <tag name="data_collector" id="dump" template="@Debug/Profiler/dump.html.twig"/>
       <argument type="service" id="debug.stopwatch" on-invalid="ignore"/>
@@ -3220,6 +3280,10 @@
       <call method="addPath">
         <argument>D:\Programowanie\PP5\zaglewski\vendor\friendsofsymfony\user-bundle/Resources/views</argument>
         <argument>FOSUser</argument>
+      </call>
+      <call method="addPath">
+        <argument>D:\Programowanie\PP5\zaglewski\vendor\iphp\filestore-bundle\Iphp\FileStoreBundle/Resources/views</argument>
+        <argument>IphpFileStore</argument>
       </call>
       <call method="addPath">
         <argument>D:\Programowanie\PP5\zaglewski\vendor\symfony\symfony\src\Symfony\Bundle\DebugBundle/Resources/views</argument>

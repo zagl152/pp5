@@ -1,5 +1,5 @@
-/var/cache/*
-/var/logs/*
+/app/cache/*
+/app/logs/*
 !var/cache/.gitkeep
 !var/logs/.gitkeep
 /app/bootstrap.php.cache
