@@ -1,0 +1,5 @@
+sklep:
+    resource: "@SklepBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
