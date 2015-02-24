@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @FileStore\Uploadable
  */
 class Product
 {
@@ -51,7 +52,7 @@ class Product
     private $price;
 
     /**
-     * @ORM\Column(name="Photo", type="array")
+     * @ORM\Column( type="array")
      * @Assert\File( maxSize="20M")
      * @FileStore\UploadableField(mapping="photo")
      **/
@@ -65,6 +66,23 @@ class Product
     public function getId()
     {
         return $this->id;
+    }
+    /**
+     * @param array $photo
+     * @return Photo
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
     }
 
     /**
