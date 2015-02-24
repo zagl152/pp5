@@ -102,7 +102,7 @@ class ProductController extends Controller
     /**
      * Finds and displays a Product entity.
      *
-     * @Route("/{id}", name="_show")
+     * @Route("/product/{id}", name="_show")
      * @Method("GET")
      * @Template()
      */
