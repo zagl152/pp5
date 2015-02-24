@@ -3,7 +3,8 @@
 namespace SklepBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Product
  *
@@ -49,6 +50,12 @@ class Product
      */
     private $price;
 
+    /**
+     * @ORM\Column(name="Photo", type="array")
+     * @Assert\File( maxSize="20M")
+     * @FileStore\UploadableField(mapping="photo")
+     **/
+    private $photo;
 
     /**
      * Get id
